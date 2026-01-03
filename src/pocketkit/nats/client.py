@@ -1,6 +1,6 @@
 import asyncio
 from abc import abstractmethod
-from typing import Awaitable, Callable, Self
+from typing import Awaitable, Callable, Self, TypeAlias
 
 import nats
 from nats.aio.client import Client
@@ -8,6 +8,8 @@ from nats.aio.msg import Msg
 from nats.js import JetStreamContext
 
 from ..logger import logger
+
+Msg: TypeAlias = Msg
 
 
 class NatsConnection:
