@@ -1,0 +1,17 @@
+[project]
+name = "pocket"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "dfine", email = "coding@dfine.tech" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.optional-dependencies]
+nats = ["nats-py>=2.11,<3.0"]  
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
