@@ -1,5 +1,5 @@
 [project]
-name = "pocket"
+name = "pocketkit"
 version = "0.1.0"
 description = "A small utility toolbox with optional modules"
 readme = "README.md"

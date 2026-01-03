@@ -14,7 +14,7 @@ from functools import wraps
 from time import perf_counter
 from typing import Callable, ParamSpec, TypeVar
 
-from pocket.logger import logger
+from ..logger import logger
 
 P = ParamSpec("P")
 R = TypeVar("R")

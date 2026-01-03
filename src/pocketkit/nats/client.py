@@ -8,7 +8,7 @@ from nats.aio.msg import Msg
 from nats.aio.subscription import Subscription
 from nats.js import JetStreamContext
 
-from pocket.logger import logger
+from ..logger import logger
 
 
 class NatsConnection:

@@ -1,6 +1,6 @@
-# pocket
+# pocketkit
 
-`pocket` 是一个轻量级的 Python 工具包，用于沉淀和复用项目中常用的工具函数、装饰器以及可选的基础设施封装。  
+`pocketkit` 是一个轻量级的 Python 工具包，用于沉淀和复用项目中常用的工具函数、装饰器以及可选的基础设施封装。  
 设计目标是 **模块化、可选依赖、长期可维护**。
 
 ---
@@ -19,12 +19,12 @@
 ### 基础安装（不包含可选模块）
 
 ```bash
-uv add pocket
+uv add pocketkit
 ```
 ## 安装 NATS 模块（可选）
 
 ```
-uv add pocket[nats]
+uv add pocketkit[nats]
 ```
 nats 模块依赖官方客户端 nats-py，通过 extras 自动安装。
 
@@ -32,7 +32,7 @@ nats 模块依赖官方客户端 nats-py，通过 extras 自动安装。
 
 ### 同步函数
 ```python
-from pocket.decorators.timing import get_time_sync
+from pocketkit.decorators.timing import get_time_sync
 
 @get_time_sync
 def compute(a: int, b: int) -> int:
@@ -45,7 +45,7 @@ compute(1, 2)
 ### 异步函数
 ```python
 import asyncio
-from pocket.decorators.timing import get_time_async
+from pocketkit.decorators.timing import get_time_async
 
 @get_time_async
 async def async_compute(a: int, b: int) -> int:
@@ -57,7 +57,7 @@ asyncio.run(async_compute(1, 2))
 ## Nats
 ```python
 import asyncio
-from pocket.nats import NatsConnection, EventPublisher
+from pocketkit.nats import NatsConnection, EventPublisher
 
 async def main():
     conn = await NatsConnection.create("nats://127.0.0.1:4222")
@@ -72,9 +72,9 @@ asyncio.run(main())
 ```
 ## 项目结构
 ```
-pocket/
+pocketkit/
 ├── src/
-│   └── pocket/
+│   └── pocketkit/
 │       ├── __init__.py
 │       ├── logger.py
 │       ├── decorators/
