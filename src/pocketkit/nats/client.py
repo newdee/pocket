@@ -26,13 +26,13 @@ class NatsConnection:
         logger.info(f"[NATS] Connecting to {server}")
         nc = await nats.connect(server)
         js = nc.jetstream()
-        logger.success("[NATS] Connected and JetStream ready")
+        logger.info("[NATS] Connected and JetStream ready")
         return cls(server, nc, js)
 
     async def close(self) -> None:
         logger.info("[NATS] Draining connection")
         await self.nc.drain()
-        logger.success("[NATS] Connection closed")
+        logger.info("[NATS] Connection closed")
 
     async def request(self, subject: str, data: bytes, timeout: float = 1.0) -> bytes:
         logger.info(f"[REQUEST] Sending request to {subject}")
@@ -62,7 +62,7 @@ class EventSubscriber:
     ) -> None:
         logger.info(f"[EVENT:SUB] Subscribing to {subject}")
         await self.nc.subscribe(subject, cb=handler)
-        logger.success(f"[EVENT:SUB] Listening on {subject}")
+        logger.info(f"[EVENT:SUB] Listening on {subject}")
 
 
 class StreamPublisher:
@@ -78,14 +78,14 @@ class StreamPublisher:
         )
         try:
             await self.js.add_stream(name=self.stream, subjects=[self.subject])
-            logger.success(f"[WORKER] Stream ready: {self.stream} -> {self.subject}")
+            logger.info(f"[WORKER] Stream ready: {self.stream} -> {self.subject}")
         except Exception as e:
             logger.warning(f"[WORKER] Stream may already exist: {e}")
 
     async def submit(self, data: bytes) -> None:
         logger.info(f"[QUEUE:PUB] Submit task -> {self.subject}")
         ack = await self.js.publish(self.subject, data)
-        logger.success(f"[QUEUE:PUB] Stored seq={ack.seq} subject={self.subject}")
+        logger.info(f"[QUEUE:PUB] Stored seq={ack.seq} subject={self.subject}")
 
 
 class BaseStreamWorker:
@@ -104,7 +104,7 @@ class BaseStreamWorker:
         )
         try:
             await self.js.add_stream(name=self.stream, subjects=[self.subject])
-            logger.success(f"[WORKER] Stream ready: {self.stream} -> {self.subject}")
+            logger.info(f"[WORKER] Stream ready: {self.stream} -> {self.subject}")
         except Exception as e:
             logger.warning(f"[WORKER] Stream may already exist: {e}")
 
@@ -133,7 +133,7 @@ class PullStreamWorker(BaseStreamWorker):
             durable=self.durable,
         )
 
-        logger.success(f"[WORKER] Ready (durable={self.durable})")
+        logger.info(f"[WORKER] Ready (durable={self.durable})")
 
         while True:
             try:
@@ -147,7 +147,7 @@ class PullStreamWorker(BaseStreamWorker):
                 try:
                     await handler(msg)
                     await msg.ack()
-                    logger.success(f"[WORKER] Acked seq={msg.metadata.sequence.stream}")
+                    logger.info(f"[WORKER] Acked seq={msg.metadata.sequence.stream}")
                 except Exception as e:
                     logger.error(
                         f"[WORKER] Failed seq={msg.metadata.sequence.stream}: {e}"
@@ -172,7 +172,7 @@ class SubscribeStreamWorker(BaseStreamWorker):
 
         await self.js.subscribe(subject=self.subject, durable=self.durable, cb=handler)
 
-        logger.success(f"[WORKER] Listening (durable={self.durable}) on {self.subject}")
+        logger.info(f"[WORKER] Listening (durable={self.durable}) on {self.subject}")
 
 
 class QueueWorker:
@@ -195,7 +195,7 @@ class QueueWorker:
             queue=self.queue,
         )
 
-        logger.success(f"[QUEUE] Listening on {self.subject} (queue={self.queue})")
+        logger.info(f"[QUEUE] Listening on {self.subject} (queue={self.queue})")
 
 
 class Responder:
@@ -212,4 +212,4 @@ class Responder:
 
         logger.info(f"[RESPONDER] Subscribing to {self.subject}")
         await self.nc.subscribe(self.subject, cb=cb)
-        logger.success(f"[RESPONDER] Listening on {self.subject}")
+        logger.info(f"[RESPONDER] Listening on {self.subject}")
