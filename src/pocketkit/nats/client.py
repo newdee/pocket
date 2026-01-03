@@ -1,14 +1,15 @@
 import asyncio
 from abc import abstractmethod
-from typing import Awaitable, Callable, Self
+from typing import Awaitable, Callable, Self, TypeAlias
 
 import nats
 from nats.aio.client import Client
 from nats.aio.msg import Msg
-from nats.aio.subscription import Subscription
 from nats.js import JetStreamContext
 
 from ..logger import logger
+
+Msg: TypeAlias = Msg
 
 
 class NatsConnection:
@@ -169,9 +170,7 @@ class SubscribeStreamWorker(BaseStreamWorker):
             f"[WORKER] Starting subscribe worker durable={self.durable} subject={self.subject}"
         )
 
-        sub = await self.js.subscribe(
-            subject=self.subject, durable=self.durable, cb=handler
-        )
+        await self.js.subscribe(subject=self.subject, durable=self.durable, cb=handler)
 
         logger.success(f"[WORKER] Listening (durable={self.durable}) on {self.subject}")
 

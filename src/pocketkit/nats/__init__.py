@@ -2,6 +2,7 @@ try:
     from .client import (
         EventPublisher,
         EventSubscriber,
+        Msg,
         NatsConnection,
         PullStreamWorker,
         QueueWorker,
@@ -18,6 +19,7 @@ __all__ = [
     "NatsConnection",
     "EventPublisher",
     "EventSubscriber",
+    "Msg",
     "StreamPublisher",
     "PullStreamWorker",
     "SubscribeStreamWorker",
